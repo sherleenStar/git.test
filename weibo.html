@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>微博发布</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+            outline: none;
+        }
+
+        a {
+            text-decoration: none;
+            color: black;
+
+        }
+
+        .box {
+            width: 600px;
+            /* height: 300px; */
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 100px auto;
+            /* overflow: hidden; */
+        }
+
+        .box .text {
+            height: 150px;
+            width: 100%;
+
+            resize: none;
+            font-size: 14pt;
+
+        }
+
+        .box .btn {
+            width: 80px;
+            height: 30px;
+            background-color: orangered;
+            border: 1px solid #fff;
+            border-radius: 5px;
+            color: #fff;
+            margin-top: 5px;
+            cursor: pointer;
+        }
+
+        ul {
+            margin-top: 10px;
+           
+        }
+
+        ul li {
+            border-bottom: 1px dotted #ccc;
+            height: 30px;
+            line-height: 30px;
+            font-size: 14px; 
+            /* overflow: hidden; */
+        }
+
+        ul li a {
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            background-color: #ccc;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-left: 10px;
+            float: right;
+            box-sizing: border-box;
+        }
+        ul li span:nth-child(3){
+            float: right;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <textarea name="" id="" class="text"></textarea>
+        <input type="button" class="btn" value="发布">
+        <ul class="ul">
+            <!-- <li>
+                <span>快来收了这九款用上就停不下来的应用吧</span> <a>删除</a>
+            </li>
+            <li>
+                <span>超级详细的云南大理自助游攻略</span>
+                <a>删除</a>
+            </li>
+            <li>
+                <span>外国最近很火的舞蹈,舒服简单自然,太棒了!</span>
+                <a>删除</a>
+            </li> -->
+        </ul>
+    </div>
+</body>
+<script>
+    var text = document.querySelector(".text");
+    var btn = document.querySelector(".btn");
+    var ul = document.querySelector(".ul");   
+    var data = [];
+    function nowTime() {
+        var time = new Date();
+        var year = time.getFullYear();
+        var month = time.getMonth() + 1;
+        var day = time.getDate();
+        var hour = time.getHours();
+        var minute = time.getMinutes();
+        var second = time.getSeconds();
+        return `${add0(year)}-${add0(month)}-${add0(day)} ${add0(hour)}:${add0(minute)}:${add0(second)}`;
+    }
+    function add0(e) {
+        return e < 10 ? '0' + e : e;
+    }
+
+    // 列表初始化
+    var arr;
+    if(localStorage.getItem("data")==null){
+        arr=[];
+
+    }else{
+        arr = localStorage.getItem("data");
+        arr = JSON.parse(arr);
+    }
+    var li = null;
+    arr.forEach(function(ele,i){
+        li = document.createElement("li");
+        li.innerHTML = `
+        <span>${ele.content}</span>
+        <a id=${ele.id}>删除</a>
+        <span>${ele.time}</span>
+        `;
+        ul.appendChild(li);
+        
+    });
+
+    // 注册点击事件
+    btn.onclick = function(){
+        var content = text.value;
+        if(content==""){
+            alert("输入为空，不能发布");
+            return;
+        }
+        var time = nowTime();
+        var id = Date.now()+"."+Math.random();
+        var li = document.createElement("li");
+        li.innerHTML = `
+        <span>${content}</span>
+        <a id=${id}>删除</a>
+        <span>${time}</span>
+        `;
+        ul.insertBefore(li,ul.children[0]);
+        var obj = {
+            content:content,
+            time:time,
+            id:id
+        };
+        arr.unshift(obj);
+        var str= JSON.stringify(arr);
+        localStorage.setItem("data",str);
+        text.value="";
+
+    }
+    // 组合键发布
+    text.onkeydown = function(e){
+        if(e.ctrlKey&&e.keyCode==13){
+            btn.onlick();
+        }
+    }
+
+
+    // 实现删除效果
+    // 事件委托给ul
+    ul.onclick = function(event){
+        if(event.target.nodeName==="A"){
+            ul.removeChild(event.target.parentNode);
+            arr.forEach(function(item,i){
+                if(item.id==event.target.getAttribute("id")){
+                    arr.splice(i,1);
+                    return arr;
+                }
+        });
+        localStorage.setItem("data",JSON.stringify(arr));
+
+
+
+        }
+    }
+
+
+
+
+
+</script>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>微博发布jQury</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+            outline: none;
+        }
+
+        a {
+            text-decoration: none;
+            color: black;
+
+        }
+
+        .box {
+            width: 600px;
+            /* height: 300px; */
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 100px auto;
+            /* overflow: hidden; */
+        }
+
+        .box .text {
+            height: 150px;
+            width: 100%;
+
+            resize: none;
+            font-size: 14pt;
+
+        }
+
+        .box .btn {
+            width: 80px;
+            height: 30px;
+            background-color: orangered;
+            border: 1px solid #fff;
+            border-radius: 5px;
+            color: #fff;
+            margin-top: 5px;
+            cursor: pointer;
+        }
+
+        ul {
+            margin-top: 10px;
+           
+        }
+
+        ul li {
+            border-bottom: 1px dotted #ccc;
+            height: 30px;
+            line-height: 30px;
+            font-size: 14px; 
+            /* overflow: hidden; */
+        }
+
+        ul li a {
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            background-color: #ccc;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-left: 10px;
+            float: right;
+            box-sizing: border-box;
+        }
+        ul li span:nth-child(3){
+            float: right;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <textarea name="" id="" class="text"></textarea>
+        <input type="button" class="btn" value="发布">
+        <ul class="ul">
+            <!-- <li>
+                <span>快来收了这九款用上就停不下来的应用吧</span> <a>删除</a>
+            </li>
+            <li>
+                <span>超级详细的云南大理自助游攻略</span>
+                <a>删除</a>
+            </li>
+            <li>
+                <span>外国最近很火的舞蹈,舒服简单自然,太棒了!</span>
+                <a>删除</a>
+            </li> -->
+        </ul>
+    </div>
+    <script src="./js/jquery.min.js"></script>
+    <script>
+    $('.btn').click(function(){
+        var content = $('.text').val();
+        if(content.length != 0 ){
+            var li =$('<li></li>');
+            li.html('<span>'+content+'</span> <a>删除</a>');
+            
+            $('.ul').prepend(li);
+            li.slideDown();
+            $('.text').val('');
+        }else{
+            alert("请输入文字");
+        }
+    });
+    $('.ul').on('click',"a",function(){
+        $(this).parent().slideUp(function(){
+            $(this).remove();
+        });
+
+    });
+    
+    
+    
+    
+    </script>
+</body>
+</html>
